@@ -56,6 +56,25 @@
       <div class="stat-card" id="whatIfCard"><span>🔮 What‑if CGPA</span><strong id="whatIfGpa">—</strong></div>
     </div>
 
+    <!-- what-if controls (hidden by default) -->
+<div id="whatIfControls" style="display: none; margin-top: 1.5rem; border-top: 1px dashed #b2cfdd; padding-top: 1.2rem;">
+  <div style="display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: flex-end;">
+    <div class="input-group" style="flex:2 1 180px;">
+      <label>Future semester GPA (out of 10)</label>
+      <input type="number" id="futureGpaInput" step="0.01" min="0" max="10" value="8.5" />
+    </div>
+    <div class="input-group" style="flex:1 1 120px;">
+      <label>Future credits</label>
+      <input type="number" id="futureCreditsInput" step="0.5" min="0" value="15" />
+    </div>
+    <button id="simulateBtn" class="btn-simulate">✨ Simulate</button>
+    <button id="resetWhatIfBtn" class="btn-reset">↺ Reset</button>
+  </div>
+  <p style="font-size:0.85rem; color:#1d4b62; margin-top:0.5rem;">
+    Enter expected average GPA &amp; credits for next semester(s) to see projected CGPA.
+  </p>
+</div>
+
     <div style="display: flex; justify-content: flex-end; margin-top: 1.8rem;">
       <button id="resetAllBtn" class="btn-reset-all">🗑️ Reset all subjects</button>
     </div>
