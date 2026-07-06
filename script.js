@@ -3,8 +3,13 @@ document.addEventListener('DOMContentLoaded', () => {
   let subjects = [];
   let nextId = 1;
   let whatIfMode = false;
+  let whatIfGpaCache = null;
 
   // DOM refs
+  const futureGpaInput = document.getElementById('futureGpaInput');
+  const futureCreditsInput = document.getElementById('futureCreditsInput');
+  const simulateBtn = document.getElementById('simulateBtn');
+  const resetWhatIfBtn = document.getElementById('resetWhatIfBtn');
   const subjectListEl = document.getElementById('subjectList');
   const semesterGpaEl = document.getElementById('semesterGpa');
   const cumulativeGpaEl = document.getElementById('cumulativeGpa');
@@ -91,6 +96,57 @@ document.addEventListener('DOMContentLoaded', () => {
     render();
   }
 
+  function runWhatIf() {
+  if (!whatIfMode) {
+    alert('Switch to What‑if mode first (click 🔮 What‑if).');
+    return;
+  }
+  if (subjects.length === 0) {
+    alert('Add at least one subject to simulate future CGPA.');
+    return;
+  }
+  
+  const futureGpa = parseFloat(futureGpaInput.value);
+  const futureCredits = parseFloat(futureCreditsInput.value);
+  
+  if (isNaN(futureGpa) || futureGpa < 0 || futureGpa > 10) {
+    alert('Future GPA must be between 0 and 10.');
+    return;
+  }
+  if (isNaN(futureCredits) || futureCredits < 0) {
+    alert('Future credits must be a positive number.');
+    return;
+  }
+
+  // Calculate current totals
+  let curPoints = 0, curCredits = 0;
+  for (let s of subjects) {
+    const c = parseFloat(s.credits);
+    const g = parseFloat(s.grade);
+    curPoints += c * g;
+    curCredits += c;
+  }
+  
+  const totalFutureCredits = curCredits + futureCredits;
+  if (totalFutureCredits === 0) {
+    whatIfGpaCache = null;
+    render();
+    return;
+  }
+  
+  const totalPoints = curPoints + (futureGpa * futureCredits);
+  const projected = totalPoints / totalFutureCredits;
+  whatIfGpaCache = projected;
+  render();
+}
+
+function resetWhatIf() {
+  whatIfGpaCache = null;
+  render();
+  futureGpaInput.value = '8.5';
+  futureCreditsInput.value = '15';
+}
+
   // ----- add subject -----
   function addSubject() {
     const name = nameInp.value.trim();
@@ -140,7 +196,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   nameInp.addEventListener('keydown', (e) => { if (e.key === 'Enter') addSubject(); });
   creditsInp.addEventListener('keydown', (e) => { if (e.key === 'Enter') addSubject(); });
-
+  simulateBtn.addEventListener('click', runWhatIf);
+  resetWhatIfBtn.addEventListener('click', resetWhatIf);
   // initial render
   setMode(false);
 });
