@@ -72,6 +72,25 @@ document.addEventListener('DOMContentLoaded', () => {
     whatIfGpaEl.textContent = semGpa !== null ? semGpa.toFixed(2) : '—';
   }
 
+    // ----- mode toggle -----
+  function setMode(whatIf) {
+    whatIfMode = whatIf;
+    const whatIfControls = document.getElementById('whatIfControls');
+    
+    if (whatIf) {
+      modeStandard.classList.remove('active');
+      modeWhatIf.classList.add('active');
+      modeLabel.textContent = '🔮 What‑if mode';
+      whatIfControls.style.display = 'block';
+    } else {
+      modeWhatIf.classList.remove('active');
+      modeStandard.classList.add('active');
+      modeLabel.textContent = '📘 Standard mode';
+      whatIfControls.style.display = 'none';
+    }
+    render();
+  }
+
   // ----- add subject -----
   function addSubject() {
     const name = nameInp.value.trim();
