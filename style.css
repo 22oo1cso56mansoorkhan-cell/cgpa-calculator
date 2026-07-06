@@ -156,3 +156,40 @@ h1 small {
   cursor: pointer;
 }
 .btn-reset-all:hover { background: #d5e4ed; }
+
+
+.subject-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 0.5rem 1rem 0.5rem 1.4rem;
+  border-radius: 60px;
+  margin-bottom: 0.4rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+  border: 1px solid #dae8f0;
+}
+.subject-item:last-child { margin-bottom: 0; }
+.subject-item .info {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+}
+.subject-item .info .name { font-weight: 600; color: #0b2a3b; }
+.subject-item .info .credits { color: #1f5773; }
+.subject-item .info .grade { font-weight: 500; color: #115b7c; }
+.subject-item .del-btn {
+  background: none;
+  border: none;
+  color: #af3f3f;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0 0.4rem;
+  transition: 0.1s;
+}
+.subject-item .del-btn:hover { color: #9f1f1f; transform: scale(1.2); }
+
+.subject-list::-webkit-scrollbar { width: 6px; }
+.subject-list::-webkit-scrollbar-track { background: #dce8ef; border-radius: 20px; }
+.subject-list::-webkit-scrollbar-thumb { background: #93b3c9; border-radius: 20px; }
