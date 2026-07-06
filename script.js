@@ -15,8 +15,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const gradeSelect = document.getElementById('subjectGrade');
   const resetAllBtn = document.getElementById('resetAllBtn');
 
-  // ----- render function -----
+  // ----- helpers -----
+  function calcGPA(subjArray) {
+    if (!subjArray.length) return null;
+    let totalPoints = 0, totalCredits = 0;
+    for (let s of subjArray) {
+      const c = parseFloat(s.credits);
+      const g = parseFloat(s.grade);
+      totalPoints += c * g;
+      totalCredits += c;
+    }
+    if (totalCredits === 0) return null;
+    return totalPoints / totalCredits;
+  }
+
+  // ----- render -----
   function render() {
+    // render subject list
     if (subjects.length === 0) {
       subjectListEl.innerHTML = `<p style="color:#386f8a; font-style:italic; padding:0.4rem 0;">No subjects added yet. Add your courses above.</p>`;
     } else {
@@ -34,7 +49,22 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
       }
       subjectListEl.innerHTML = html;
+
+      // attach delete events
+      document.querySelectorAll('.del-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = parseInt(btn.dataset.id);
+          subjects = subjects.filter(s => s.id !== id);
+          render();
+        });
+      });
     }
+
+    // update GPA stats
+    const semGpa = calcGPA(subjects);
+    semesterGpaEl.textContent = semGpa !== null ? semGpa.toFixed(2) : '—';
+    cumulativeGpaEl.textContent = semGpa !== null ? semGpa.toFixed(2) : '—';
+    whatIfGpaEl.textContent = semGpa !== null ? semGpa.toFixed(2) : '—';
   }
 
   // ----- add subject -----
@@ -70,6 +100,5 @@ document.addEventListener('DOMContentLoaded', () => {
   nameInp.addEventListener('keydown', (e) => { if (e.key === 'Enter') addSubject(); });
   creditsInp.addEventListener('keydown', (e) => { if (e.key === 'Enter') addSubject(); });
 
-  // initial render
   render();
 });
