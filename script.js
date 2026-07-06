@@ -2,12 +2,17 @@ document.addEventListener('DOMContentLoaded', () => {
   // ----- STATE -----
   let subjects = [];
   let nextId = 1;
+  let whatIfMode = false;
 
   // DOM refs
   const subjectListEl = document.getElementById('subjectList');
   const semesterGpaEl = document.getElementById('semesterGpa');
   const cumulativeGpaEl = document.getElementById('cumulativeGpa');
   const whatIfGpaEl = document.getElementById('whatIfGpa');
+
+  const modeStandard = document.getElementById('modeStandard');
+  const modeWhatIf = document.getElementById('modeWhatIf');
+  const modeLabel = document.getElementById('modeLabel');
 
   const addBtn = document.getElementById('addSubjectBtn');
   const nameInp = document.getElementById('subjectName');
@@ -42,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="info">
               <span class="name">${s.name}</span>
               <span class="credits">${s.credits} cr</span>
-              <span class="grade">${s.grade}</span>
+              <span class="grade">${s.grade}/10</span>
             </div>
             <button class="del-btn" data-id="${s.id}">✕</button>
           </div>
@@ -60,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // update GPA stats
+    // update GPA stats (out of 10)
     const semGpa = calcGPA(subjects);
     semesterGpaEl.textContent = semGpa !== null ? semGpa.toFixed(2) : '—';
     cumulativeGpaEl.textContent = semGpa !== null ? semGpa.toFixed(2) : '—';
@@ -80,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
     render();
     nameInp.value = '';
     creditsInp.value = '3';
-    gradeSelect.value = '3.0';
+    gradeSelect.value = '8';
   }
 
   // ----- reset all -----
@@ -93,12 +98,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // ----- mode toggle -----
+  function setMode(whatIf) {
+    whatIfMode = whatIf;
+    if (whatIf) {
+      modeStandard.classList.remove('active');
+      modeWhatIf.classList.add('active');
+      modeLabel.textContent = '🔮 What‑if mode';
+    } else {
+      modeWhatIf.classList.remove('active');
+      modeStandard.classList.add('active');
+      modeLabel.textContent = '📘 Standard mode';
+    }
+    render();
+  }
+
   // ----- event binding -----
   addBtn.addEventListener('click', addSubject);
   resetAllBtn.addEventListener('click', resetAll);
+  modeStandard.addEventListener('click', () => setMode(false));
+  modeWhatIf.addEventListener('click', () => setMode(true));
 
   nameInp.addEventListener('keydown', (e) => { if (e.key === 'Enter') addSubject(); });
   creditsInp.addEventListener('keydown', (e) => { if (e.key === 'Enter') addSubject(); });
 
-  render();
+  // initial render
+  setMode(false);
 });
